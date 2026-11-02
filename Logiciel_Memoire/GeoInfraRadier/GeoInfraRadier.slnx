@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="GeoInfraRadier.vcxproj" Id="23868134-3eca-4a41-95fb-8740731e4747" />
+  <Project Path="..\GeoInfraRadierCalcul\GeoInfraRadierCalcul.vcxproj" Id="7a2c9e2e-6b7a-4d3d-9c1a-2f6f7b1a9e11" />
+  <Project Path="..\GeoTechRadier\GeoTechRadier.csproj" Id="{c8a4b6e2-3f1d-4a9e-8b7c-1d2e3f4a5b6c}" />
+</Solution>

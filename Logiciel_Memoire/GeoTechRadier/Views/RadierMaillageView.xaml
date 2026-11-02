@@ -1,0 +1,246 @@
+<UserControl x:Class="GeoTechRadier.Views.RadierMaillageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:GeoTechRadier.ViewModels"
+             xmlns:conv="clr-namespace:GeoTechRadier.Views.Converters"
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" Background="{StaticResource BrushFond}">
+    <UserControl.Resources>
+        <conv:EnumEgalConverter x:Key="EnumEgalLocal"/>
+        <conv:EnumVersVisibiliteConverter x:Key="EnumVersVisibiliteLocal"/>
+        <Style TargetType="TextBox" x:Key="ChampCarte">
+            <Setter Property="Width" Value="130"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,18">
+            <TextBlock Text="Radier &amp; Maillage" Style="{StaticResource TitreModule}"/>
+            <TextBlock Text="Geometrie, proprietes mecaniques et discretisation en elements finis"
+                       Style="{StaticResource SousTitreModule}"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="380"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ============ Colonne gauche : parametres ============ -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,18,0">
+                <StackPanel>
+
+                    <!-- Carte Geometrie -->
+                    <Border Style="{StaticResource Carte}" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="GEOMETRIE" Style="{StaticResource TitreCarte}" Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Type de radier" Style="{StaticResource EtiquetteChamp}"/>
+                            <UniformGrid Columns="3" Margin="0,0,0,14">
+                                <RadioButton Content="Rectangulaire" GroupName="forme" Style="{StaticResource BoutonSegment}" Margin="0,0,4,0"
+                                             IsChecked="{Binding Donnees.Forme, Converter={StaticResource EnumEgalLocal}, ConverterParameter=Rectangulaire}"/>
+                                <RadioButton Content="En L" GroupName="forme" Style="{StaticResource BoutonSegment}" Margin="2,0"
+                                             IsChecked="{Binding Donnees.Forme, Converter={StaticResource EnumEgalLocal}, ConverterParameter=L}"/>
+                                <RadioButton Content="En U" GroupName="forme" Style="{StaticResource BoutonSegment}" Margin="4,0,0,0"
+                                             IsChecked="{Binding Donnees.Forme, Converter={StaticResource EnumEgalLocal}, ConverterParameter=U}"/>
+                            </UniformGrid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Longueur X  --  Lx (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                         Text="{Binding Donnees.Lx, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Largeur Y  --  Ly (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                         Text="{Binding Donnees.Ly, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+
+                            <!-- Parametres specifiques au L -->
+                            <StackPanel Visibility="{Binding Donnees.Forme, Converter={StaticResource EnumVersVisibiliteLocal}, ConverterParameter=L}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Echancrure Bx (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                             Text="{Binding Donnees.Bx, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Echancrure By (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                             Text="{Binding Donnees.By, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Parametres specifiques au U -->
+                            <StackPanel Visibility="{Binding Donnees.Forme, Converter={StaticResource EnumVersVisibiliteLocal}, ConverterParameter=U}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Bord gauche echancrure x1 (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                             Text="{Binding Donnees.X1, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Bord droit echancrure x2 (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                             Text="{Binding Donnees.X2, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Profondeur echancrure By (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                             Text="{Binding Donnees.ByU, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Carte Materiau -->
+                    <Border Style="{StaticResource Carte}" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="PROPRIETES DU RADIER" Style="{StaticResource TitreCarte}" Margin="0,0,0,12"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Epaisseur h (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                         Text="{Binding Donnees.HRadier, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Module de Young E (kPa)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                         Text="{Binding Donnees.EBeton, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Coefficient de Poisson nu" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}"
+                                         Text="{Binding Donnees.NuBeton, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Carte Maillage -->
+                    <Border Style="{StaticResource Carte}">
+                        <StackPanel>
+                            <TextBlock Text="MAILLAGE" Style="{StaticResource TitreCarte}" Margin="0,0,0,12"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Taille element X (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                         Text="{Binding Donnees.TailleX, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Taille element Y (m)" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource ChampCarte}" Margin="0,0,0,8"
+                                         Text="{Binding Donnees.TailleY, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                            <Button Content="Actualiser la vue" Style="{StaticResource BoutonSecondaire}"
+                                    HorizontalAlignment="Left" Command="{Binding ActualiserApercuCommand}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ============ Colonne droite : vue graphique ============ -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource Carte}">
+                    <Grid>
+                        <TextBlock Text="VUE DU RADIER" Style="{StaticResource TitreCarte}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <Viewbox Stretch="Uniform" Margin="20,30,20,20">
+                            <Canvas Width="320" Height="320" ClipToBounds="False">
+                                <!-- Grille du maillage (donnees reelles du moteur, un quadrilatere
+                                     par element actif) : dessinee sous le contour, sans remplissage. -->
+                                <ItemsControl ItemsSource="{Binding Donnees.ElementsAffichage}" Canvas.Left="20" Canvas.Top="20">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate><Canvas/></ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Polygon Points="{Binding}" Fill="Transparent"
+                                                     Stroke="{StaticResource BrushBordure}" StrokeThickness="0.75"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Polygon Points="{Binding Donnees.ContourPoints}" Fill="Transparent"
+                                         Stroke="{StaticResource BrushAccent}" StrokeThickness="2.5"
+                                         Canvas.Left="20" Canvas.Top="20"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock Text="Cliquez sur 'Actualiser la vue' apres modification de la geometrie."
+                                   Foreground="{StaticResource BrushEncreDoux}" FontStyle="Italic" FontSize="11"
+                                   VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource Carte}" Margin="0,14,0,0">
+                    <UniformGrid Columns="5">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="ELEMENTS X" Style="{StaticResource EtiquetteChamp}"/>
+                            <TextBlock Text="{Binding Donnees.Maillage.Nx}" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="ELEMENTS Y" Style="{StaticResource EtiquetteChamp}"/>
+                            <TextBlock Text="{Binding Donnees.Maillage.Ny}" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="ELEMENTS ACTIFS" Style="{StaticResource EtiquetteChamp}"/>
+                            <TextBlock Text="{Binding Donnees.Maillage.NbElements}" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="NOEUDS" Style="{StaticResource EtiquetteChamp}"/>
+                            <TextBlock Text="{Binding Donnees.Maillage.Nn}" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="DDL" Style="{StaticResource EtiquetteChamp}"/>
+                            <TextBlock Text="{Binding Donnees.Maillage.Ndof}" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

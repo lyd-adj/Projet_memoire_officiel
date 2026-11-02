@@ -1,0 +1,179 @@
+<UserControl x:Class="GeoTechRadier.Views.ResultatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:GeoTechRadier.ViewModels"
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" Background="{StaticResource BrushFond}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="Resultats" Style="{StaticResource TitreModule}"/>
+            <TextBlock Text="Tableaux numeriques et valeurs caracteristiques, issus directement du moteur"
+                       Style="{StaticResource SousTitreModule}"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Carte}"
+                Visibility="{Binding Resultats.ADesResultats, Converter={StaticResource BoolVersVisibiliteInverse}}">
+            <TextBlock Text="Aucun resultat : renseignez les donnees puis lancez le calcul (module Calcul)."
+                       FontStyle="Italic" Foreground="{StaticResource BrushEncreDoux}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <Grid Grid.Row="1" Visibility="{Binding Resultats.ADesResultats, Converter={StaticResource BoolVersVisibilite}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource Carte}" Margin="0,0,0,14" Padding="14">
+                <WrapPanel>
+                    <StackPanel Margin="0,0,28,0">
+                        <TextBlock Text="NOEUDS" Style="{StaticResource EtiquetteChamp}"/>
+                        <TextBlock Text="{Binding Resultats.Nn}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,28,0">
+                        <TextBlock Text="ELEMENTS ACTIFS" Style="{StaticResource EtiquetteChamp}"/>
+                        <TextBlock Text="{Binding Resultats.NbElements}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,28,0">
+                        <TextBlock Text="DDL" Style="{StaticResource EtiquetteChamp}"/>
+                        <TextBlock Text="{Binding Resultats.Ndof}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,28,0">
+                        <TextBlock Text="SOMME REACTIONS P (kN)" Style="{StaticResource EtiquetteChamp}"/>
+                        <TextBlock Text="{Binding Resultats.SommeReactionP, StringFormat=0.###}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="SOMME RZ (kN)" Style="{StaticResource EtiquetteChamp}"/>
+                        <TextBlock Text="{Binding Resultats.SommeRz, StringFormat=0.###}" FontSize="16" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </WrapPanel>
+            </Border>
+
+            <TabControl Grid.Row="1" BorderThickness="0" Background="Transparent">
+                <TabItem Header="Deplacements / Tassements">
+                    <DataGrid ItemsSource="{Binding Resultats.Noeuds}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Noeud" Binding="{Binding Numero}"/>
+                            <DataGridTextColumn Header="X (m)" Binding="{Binding X, StringFormat=0.000}"/>
+                            <DataGridTextColumn Header="Y (m)" Binding="{Binding Y, StringFormat=0.000}"/>
+                            <DataGridTextColumn Header="w (m)" Binding="{Binding W, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="th_x (rad)" Binding="{Binding ThetaX, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="th_y (rad)" Binding="{Binding ThetaY, StringFormat=0.000e+00}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Pressions d'interaction">
+                    <DataGrid ItemsSource="{Binding Resultats.Noeuds}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Noeud" Binding="{Binding Numero}"/>
+                            <DataGridTextColumn Header="X (m)" Binding="{Binding X, StringFormat=0.000}"/>
+                            <DataGridTextColumn Header="Y (m)" Binding="{Binding Y, StringFormat=0.000}"/>
+                            <DataGridTextColumn Header="Pc (kPa)" Binding="{Binding Pression, StringFormat=0.000e+00}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Reactions du sol">
+                    <DataGrid ItemsSource="{Binding Resultats.Noeuds}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Noeud" Binding="{Binding Numero}"/>
+                            <DataGridTextColumn Header="Rz (kN)" Binding="{Binding Rz, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="Rmx (kN.m)" Binding="{Binding RMx, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="Rmy (kN.m)" Binding="{Binding RMy, StringFormat=0.000e+00}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Rotations">
+                    <DataGrid ItemsSource="{Binding Resultats.Noeuds}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Noeud" Binding="{Binding Numero}"/>
+                            <DataGridTextColumn Header="th_x (rad)" Binding="{Binding ThetaX, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="th_y (rad)" Binding="{Binding ThetaY, StringFormat=0.000e+00}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Coefficient ks">
+                    <DataGrid ItemsSource="{Binding Resultats.Noeuds}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Noeud" Binding="{Binding Numero}"/>
+                            <DataGridTextColumn Header="Tassement (m)" Binding="{Binding W, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="Pression (kPa)" Binding="{Binding Pression, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="ks (kN/m3)" Binding="{Binding Ks, StringFormat=0.000e+00}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Moments par element">
+                    <DataGrid ItemsSource="{Binding Resultats.Elements}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Element" Binding="{Binding Numero}"/>
+                            <DataGridTextColumn Header="xc (m)" Binding="{Binding Xc, StringFormat=0.000}"/>
+                            <DataGridTextColumn Header="yc (m)" Binding="{Binding Yc, StringFormat=0.000}"/>
+                            <DataGridTextColumn Header="Mx (kN.m/m)" Binding="{Binding Mx, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="My (kN.m/m)" Binding="{Binding My, StringFormat=0.000e+00}"/>
+                            <DataGridTextColumn Header="Mxy (kN.m/m)" Binding="{Binding Mxy, StringFormat=0.000e+00}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Valeurs extremes">
+                    <ScrollViewer Margin="0,10,0,0">
+                        <UniformGrid Columns="2" Rows="3">
+                            <Border Style="{StaticResource Carte}" Margin="0,0,10,10">
+                                <StackPanel>
+                                    <TextBlock Text="TASSEMENT MAXIMAL" Style="{StaticResource TitreCarte}"/>
+                                    <TextBlock Text="{Binding Resultats.Extremes.TassementMax.W, StringFormat=0.000e+00}" FontSize="20" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock Text="{Binding Resultats.Extremes.TassementMax.Numero, StringFormat='Noeud {0}'}" Foreground="{StaticResource BrushEncreDoux}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Carte}" Margin="10,0,0,10">
+                                <StackPanel>
+                                    <TextBlock Text="TASSEMENT MINIMAL" Style="{StaticResource TitreCarte}"/>
+                                    <TextBlock Text="{Binding Resultats.Extremes.TassementMin.W, StringFormat=0.000e+00}" FontSize="20" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock Text="{Binding Resultats.Extremes.TassementMin.Numero, StringFormat='Noeud {0}'}" Foreground="{StaticResource BrushEncreDoux}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Carte}" Margin="0,0,10,10">
+                                <StackPanel>
+                                    <TextBlock Text="PRESSION MAXIMALE / MINIMALE (kPa)" Style="{StaticResource TitreCarte}"/>
+                                    <TextBlock FontSize="16" FontWeight="Bold" Margin="0,6,0,0">
+                                        <Run Text="{Binding Resultats.Extremes.PressionMax.Pression, StringFormat=0.000e+00}"/>
+                                        <Run Text=" / "/>
+                                        <Run Text="{Binding Resultats.Extremes.PressionMin.Pression, StringFormat=0.000e+00}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Carte}" Margin="10,0,0,10">
+                                <StackPanel>
+                                    <TextBlock Text="REACTION MAXIMALE / TOTALE (kN)" Style="{StaticResource TitreCarte}"/>
+                                    <TextBlock FontSize="16" FontWeight="Bold" Margin="0,6,0,0">
+                                        <Run Text="{Binding Resultats.Extremes.ReactionMax.Rz, StringFormat=0.000e+00}"/>
+                                        <Run Text=" / "/>
+                                        <Run Text="{Binding Resultats.Extremes.ReactionTotale, StringFormat=0.000e+00}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Carte}" Margin="0,0,10,0">
+                                <StackPanel>
+                                    <TextBlock Text="DISTORSION ANGULAIRE MAXIMALE" Style="{StaticResource TitreCarte}"/>
+                                    <TextBlock Text="{Binding Resultats.Extremes.DistorsionMax, StringFormat=0.000e+00}" FontSize="20" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock Text="{Binding Resultats.Extremes.DistanceCorrespondante, StringFormat='Distance correspondante : {0:0.00} m'}" Foreground="{StaticResource BrushEncreDoux}"/>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</UserControl>

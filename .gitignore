@@ -1,0 +1,61 @@
+
+# ====================================
+# GEOTECHRADIER - GITIGNORE
+# ====================================
+
+# Fichiers temporaires Visual Studio
+.vs/
+.vscode/
+*.VC.db
+*.VC.opendb
+*.ipch
+*.pch
+*.sdf
+*.opensdf
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Dossiers de compilation
+[Dd]ebug/
+[Rr]elease/
+x64/Debug/
+x64/Release/
+x86/Debug/
+x86/Release/
+[Bb]in/
+[Oo]bj/
+
+# Fichiers compilés C++
+*.obj
+*.o
+*.pdb
+*.idb
+*.ilk
+*.iobj
+*.ipch
+*.tlog
+*.lastbuildstate
+*.log
+
+# Exécutables et bibliothèques générés
+*.exe
+*.dll
+*.lib
+*.exp
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.bak
+*.cache
+*.db-shm
+*.db-wal
+
+# Fichiers système
+Thumbs.db
+.DS_Store
+
+# Fichiers NuGet temporaires
+packages/

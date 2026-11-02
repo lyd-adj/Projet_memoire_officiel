@@ -1,0 +1,71 @@
+<UserControl x:Class="GeoTechRadier.Views.VisualisationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:GeoTechRadier.ViewModels"
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" Background="{StaticResource BrushFond}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,18">
+            <TextBlock Text="Visualisation" Style="{StaticResource TitreModule}"/>
+            <TextBlock Text="Cartes d'isovaleurs et surface 3D du tassement du radier"
+                       Style="{StaticResource SousTitreModule}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" MaxWidth="640">
+            <Border Style="{StaticResource Carte}" Margin="0,0,0,16"
+                    Visibility="{Binding Resultats.ADesResultats, Converter={StaticResource BoolVersVisibiliteInverse}}">
+                <TextBlock Text="Aucun resultat disponible. Lancez d'abord un calcul (module Calcul)."
+                           Foreground="{StaticResource BrushEncreDoux}" FontStyle="Italic"/>
+            </Border>
+
+            <Border Style="{StaticResource Carte}" Margin="0,0,0,14">
+                <StackPanel>
+                    <TextBlock Text="CARTE D'ISOVALEURS -- Tassement w (m)" Style="{StaticResource TitreCarte}" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="{StaticResource BrushEncreDoux}" Margin="0,0,0,12" FontSize="12">
+                        Genere une carte 2D vectorielle (SVG) du contour, du maillage et de la distribution du
+                        tassement, avec echelle graduee et legende -- fichier reel produit par le moteur, ouvert
+                        dans votre visionneuse/navigateur par defaut.
+                    </TextBlock>
+                    <Button Content="Generer et ouvrir la carte 2D" Style="{StaticResource BoutonPrimaire}"
+                            HorizontalAlignment="Left" Command="{Binding GenererCarte2DCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Carte}" Margin="0,0,0,14">
+                <StackPanel>
+                    <TextBlock Text="SURFACE 3D -- Tassement w (m)" Style="{StaticResource TitreCarte}" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="{StaticResource BrushEncreDoux}" Margin="0,0,0,12" FontSize="12">
+                        Genere une scene 3D interactive (rotation, zoom) du lit de deformation, adaptee a la
+                        geometrie reelle du radier (rectangulaire, en L ou en U). Le relief peut etre amplifie
+                        visuellement pour rester lisible, sans jamais modifier les valeurs numeriques -- l'axe
+                        vertical reste libelle "Tassement w (m)".
+                    </TextBlock>
+                    <Button Content="Generer et ouvrir la vue 3D" Style="{StaticResource BoutonPrimaire}"
+                            HorizontalAlignment="Left" Command="{Binding GenererVue3DCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Carte}">
+                <StackPanel>
+                    <TextBlock Text="EXPORT DES DONNEES" Style="{StaticResource TitreCarte}" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="{StaticResource BrushEncreDoux}" Margin="0,0,0,12" FontSize="12">
+                        Classeur Excel complet (7 feuilles : resume, forces, deplacements, reactions, pressions,
+                        coefficient ks, moments par element) -- identique a l'export du mode console.
+                    </TextBlock>
+                    <Button Content="Exporter les resultats (.xlsx)" Style="{StaticResource BoutonSecondaire}"
+                            HorizontalAlignment="Left" Command="{Binding ExporterExcelCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Margin="0,14,0,0" FontStyle="Italic" FontSize="11.5" Foreground="{StaticResource BrushEncreDoux}" TextWrapping="Wrap"
+                       Text="Note : la visualisation d'autres grandeurs (ks, pression, reaction...) sous forme de carte n'est pas encore disponible -- le moteur actuel n'exporte que le champ de tassement w. Cette fonctionnalite pourra etre ajoutee ulterieurement au moteur puis reliee ici."/>
+        </StackPanel>
+    </Grid>
+</UserControl>

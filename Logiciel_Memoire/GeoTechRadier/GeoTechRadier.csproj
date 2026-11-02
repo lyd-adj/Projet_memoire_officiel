@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <!-- GeoInfraRadierCalcul.dll est compilee en x64 uniquement : le processus C# doit l'etre aussi. -->
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <!--
+    GeoInfraRadierCalcul.dll (compilation du moteur GeoInfraRadier.cpp en DLL, projet
+    C++ voisin) doit se trouver a cote de l'executable C# pour que le P/Invoke
+    (Interop/NativeMethods.cs) puisse la charger au demarrage.
+  -->
+  <ItemGroup>
+    <None Include="..\GeoInfraRadierCalcul\x64\Debug\GeoInfraRadierCalcul.dll"
+          Condition="'$(Configuration)'=='Debug' and Exists('..\GeoInfraRadierCalcul\x64\Debug\GeoInfraRadierCalcul.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>GeoInfraRadierCalcul.dll</Link>
+    </None>
+    <None Include="..\GeoInfraRadierCalcul\x64\Release\GeoInfraRadierCalcul.dll"
+          Condition="'$(Configuration)'=='Release' and Exists('..\GeoInfraRadierCalcul\x64\Release\GeoInfraRadierCalcul.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>GeoInfraRadierCalcul.dll</Link>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,92 @@
+<UserControl x:Class="GeoTechRadier.Views.CalculView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:GeoTechRadier.ViewModels"
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" Background="{StaticResource BrushFond}">
+    <UserControl.Resources>
+        <Style x:Key="Puce" TargetType="Border">
+            <Setter Property="Width" Value="26"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="CornerRadius" Value="13"/>
+            <Setter Property="Background" Value="#DADFE2"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Calcul" Style="{StaticResource TitreModule}"/>
+            <TextBlock Text="Execution de la chaine numerique par le moteur GeoInfraRadier.cpp"
+                       Style="{StaticResource SousTitreModule}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" MaxWidth="640" HorizontalAlignment="Left">
+            <Button Content="Lancer le calcul" Style="{StaticResource BoutonPrimaire}" FontSize="15"
+                    HorizontalAlignment="Left" Margin="0,0,0,20"
+                    Command="{Binding LancerCalculCommand}"/>
+
+            <Border Style="{StaticResource Carte}">
+                <StackPanel>
+                    <TextBlock Text="ETAT DU CALCUL" Style="{StaticResource TitreCarte}" Margin="0,0,0,14"/>
+
+                    <ProgressBar Height="6" Minimum="0" Maximum="100" Margin="0,0,0,18"
+                                 Value="{Binding Calcul.ProgressionPourcent, Mode=OneWay}"
+                                 Foreground="{StaticResource BrushAccent}" Background="#E5E9EB" BorderThickness="0"/>
+
+                    <ItemsControl ItemsSource="{Binding Calcul.Etapes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,14">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Style="{StaticResource Puce}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   FontWeight="Bold" Foreground="White" FontSize="13">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value=""/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Etat}" Value="Termine">
+                                                            <Setter Property="Text" Value="&#10003;"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Etat}" Value="EnCours">
+                                                            <Setter Property="Text" Value="&#8226;"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Etat}" Value="Erreur">
+                                                            <Setter Property="Text" Value="!"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Text="{Binding Libelle}" VerticalAlignment="Center"
+                                               Margin="12,0,0,0" FontSize="13.5"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Border Background="{StaticResource BrushAccentDoux}" CornerRadius="4" Padding="12" Margin="0,4,0,0"
+                            Visibility="{Binding Calcul.TermineAvecSucces, Converter={StaticResource BoolVersVisibilite}}">
+                        <TextBlock Text="Calcul termine avec succes. Consultez le module Resultats."
+                                   Foreground="{StaticResource BrushAccentFonce}" FontWeight="SemiBold"/>
+                    </Border>
+                    <Border Background="#FBEAEA" CornerRadius="4" Padding="12" Margin="0,4,0,0"
+                            Visibility="{Binding Calcul.MessageErreur, Converter={StaticResource StringVersVisibilite}, FallbackValue=Collapsed}">
+                        <TextBlock Text="{Binding Calcul.MessageErreur}" Foreground="{StaticResource BrushErreur}"
+                                   FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>

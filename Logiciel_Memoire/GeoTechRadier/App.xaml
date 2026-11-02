@@ -1,0 +1,20 @@
+﻿<Application x:Class="GeoTechRadier.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GeoTechRadier"
+             xmlns:conv="clr-namespace:GeoTechRadier.Views.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <conv:BoolVersVisibiliteConverter x:Key="BoolVersVisibilite"/>
+            <conv:BoolVersVisibiliteInverseConverter x:Key="BoolVersVisibiliteInverse"/>
+            <conv:CompteurVersVisibiliteInverseConverter x:Key="CompteurVersVisibiliteInverse"/>
+            <conv:StringVersVisibiliteConverter x:Key="StringVersVisibilite"/>
+            <conv:EnumEgalConverter x:Key="EnumEgal"/>
+            <conv:EnumVersVisibiliteConverter x:Key="EnumVersVisibilite"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
